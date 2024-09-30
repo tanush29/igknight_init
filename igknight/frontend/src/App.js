@@ -3,17 +3,33 @@ import React, { useState } from 'react';
 function App() {
   const [idea, setIdea] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+  const [error, setError] = useState(null); // State to hold error messages
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Send user input to the backend
-    const response = await fetch('http://localhost:5000/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idea }),
-    });
-    const data = await response.json();
-    setSuggestions(data.suggestions);
+    setError(null); // Reset error state before making a new request
+    setSuggestions([]); // Clear previous suggestions
+
+    try {
+      const response = await fetch('http://localhost:5000/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idea }),
+      });
+
+      if (!response.ok) {
+        // If the response is not OK, throw an error to be caught below
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Something went wrong');
+      }
+
+      const data = await response.json();
+      setSuggestions(data.suggestions);
+    } catch (err) {
+      // Handle errors from the fetch request
+      console.error('Frontend Error:', err);
+      setError(err.message);
+    }
   };
 
   return (
@@ -29,6 +45,13 @@ function App() {
         />
         <button type="submit">Generate Suggestions</button>
       </form>
+
+      {error && (
+        <div style={{ color: 'red', marginTop: '20px' }}>
+          <p>Error: {error}</p>
+        </div>
+      )}
+
       {suggestions.length > 0 && (
         <div>
           <h2>Suggestions:</h2>
