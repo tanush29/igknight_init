@@ -11,7 +11,7 @@ function App() {
     setSuggestions([]); // Clear previous suggestions
 
     try {
-      const response = await fetch('http://localhost:5000/generate', {
+      const response = await fetch('http://127.0.0.1:5000/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idea }),
@@ -34,7 +34,7 @@ function App() {
 
   return (
     <div>
-      <h1>Startup Idea Generator</h1>
+      <h1>Igknight AI</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
