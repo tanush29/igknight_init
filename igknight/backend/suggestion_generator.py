@@ -7,7 +7,7 @@ def generate_suggestions(idea, trends_analysis):
     Generate suggestions for the user's startup idea based on trend data.
     """
     # Initialize GPT using the new OpenAI class
-    llm = OpenAI(api_key='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', temperature=0.7)
+    llm = OpenAI(api_key='hidden_key', temperature=0.7)
 
     # Prepare the prompt template
     prompt = PromptTemplate(
